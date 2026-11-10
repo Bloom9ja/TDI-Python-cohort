@@ -14,50 +14,50 @@ def clean_category(category):
     return category.strip()
 
 
-# # Task 1
+# Task 1
 
-# # Create a list of every order's total_cost(as numbers).
-# cost = []   # this creates an empty list
+# Create a list of every order's total_cost(as numbers).
+cost = []   # this creates an empty list
 
-# # - Find the total spend and the average order value
-# # first create an iteration to convert total_cost to float and then create a list
-# for row in rows:
-#     cost_val = float(row['total_cost']) # this changes total_cost to float and saves it in cost_val
-#     cost.append(cost_val) # this populates the list (cost) created earlier with the float value of total_cost
+# - Find the total spend and the average order value
+# first create an iteration to convert total_cost to float and then create a list
+for row in rows:
+    cost_val = float(row['total_cost']) # this changes total_cost to float and saves it in cost_val
+    cost.append(cost_val) # this populates the list (cost) created earlier with the float value of total_cost
 
 
-# total_spend = sum(cost) # calculate total spend using inbuilt function
-# average_order_value = total_spend / len(cost) # total spend is divided by the number of variables in cost (len(cost))
+total_spend = sum(cost) # calculate total spend using inbuilt function
+average_order_value = total_spend / len(cost) # total spend is divided by the number of variables in cost (len(cost))
 
-# print(f'Total Spend: {total_spend}')
-# print(f'Average Order Value: {average_order_value}')
+print(f'Total Spend: {total_spend}')
+print(f'Average Order Value: {average_order_value}')
 
-# # - Sort the lit and find the median
-# sorted_cost = sorted(cost) # this sorts the cost list created earlier
-# n = len(sorted_cost) # this counts the number of variables in cost
+# - Sort the lit and find the median
+sorted_cost = sorted(cost) # this sorts the cost list created earlier
+n = len(sorted_cost) # this counts the number of variables in cost
 
-# print(sorted_cost[:5]) # prints 0,1,2,3,4 from the cost list
-# print(n) # prints the total number of variables
+print(sorted_cost[:5]) # prints 0,1,2,3,4 from the cost list
+print(n) # prints the total number of variables
 
-# # Find the median
+# Find the median
 
-# mid = n // 2 # this calculates the position of the middle variable
-# print(mid) 
+mid = n // 2 # this calculates the position of the middle variable
+print(mid) 
 
-# if n % 2 == 0: # checks if the total number of varibles in the list is even
-#     median = (sorted_cost[mid - 1] + sorted_cost[mid]) / 2 # after confirming if list is even
-#     # this calculates the median value (mid -1 + mid) divided by 2
-# else:
-#     median = sorted_cost[mid] # if n % 2 == 0 is odd, median is one variable and it returns
-#     # the variable
+if n % 2 == 0: # checks if the total number of varibles in the list is even
+    median = (sorted_cost[mid - 1] + sorted_cost[mid]) / 2 # after confirming if list is even
+    # this calculates the median value (mid -1 + mid) divided by 2
+else:
+    median = sorted_cost[mid] # if n % 2 == 0 is odd, median is one variable and it returns
+    # the variable
 
-# print(f'Median: {median}') # prints the median
+print(f'Median: {median}') # prints the median
 
-# # Print the five smallest and largest orders
+# Print the five smallest and largest orders
 
-# # since the cost is sorted, it is now arranged from the smallest to the largest
-# print(f'Five smallest orders: {sorted_cost[:5]}') # prints the first 5 indexes 0,1,2,3,4
-# print(f'Five largest orders: {sorted_cost[-5:]}') # prints the last 5 indexes -1,-2,-3,-4,-5
+# since the cost is sorted, it is now arranged from the smallest to the largest
+print(f'Five smallest orders: {sorted_cost[:5]}') # prints the first 5 indexes 0,1,2,3,4
+print(f'Five largest orders: {sorted_cost[-5:]}') # prints the last 5 indexes -1,-2,-3,-4,-5
 
 # Task 2
 
