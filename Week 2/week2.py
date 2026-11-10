@@ -58,7 +58,6 @@ delivered_count = 0
 for row in rows:
     unique_suppliers.add(row['supplier_name'])
 
-
     cost = float(row['total_cost'])
 
     if cost > highest_cost:
@@ -89,3 +88,43 @@ def advanced_approval(order_value, on_time_rate):
 
 print(advanced_approval(120000, 0.75))
 print(advanced_approval(45000, 0.95))
+
+# Challenge 2 & 3
+
+# USED AI pending correction class
+
+def clean_supplier(name):
+    ''' 'Supplier A', 'suppliera', 'SupplierA' -> 'SupplierA' '''
+    compact = name.strip().lower().replace(' ', '')
+    return 'Supplier' + compact[-1].upper()
+
+def clean_category(category):
+    """ ' Motors ' -> 'Motors' """
+    return category.strip()
+
+supplier_a_count = 0
+supplier_a_total_cost = 0.0
+gap_tracker = {}
+
+for row in rows:
+    raw_name = row['supplier_name']
+    clean_name = clean_supplier(raw_name)
+
+    raw_cat = row['product_category']
+    clean_cat = clean_category(raw_cat)
+
+if clean_name == 'SupplierA':
+    supplier_a_count += 1
+    supplier_a_total_cost += float(row['total_cost'])
+
+for column, value in row.items():
+    if value == '':
+        if column not in gap_tracker:
+            gap_tracker[column] = 0
+        gap_tracker[column] += 1
+
+print(f'Total Orders: {supplier_a_count}')
+print(f'Total COst: ${supplier_a_total_cost:,.2f}\n')
+
+for column. count in gap_tracker.items():
+    print(f"Column '{column}' has {count} empty gap(s)")
