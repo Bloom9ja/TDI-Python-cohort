@@ -91,3 +91,152 @@ for suppliers in category_suppliers.values(): # looks through the values in the 
 
 print(f'Unique Suppliers: {len(unique_suppliers)}') # calculates the number of variables in
 # unique suppliers and gives the answer
+
+# Task 3
+
+# Find Unique Values with Sets
+
+raw_suppliers = set() #creates an empty set to store uncleaned supplier name
+clean_suppliers = set() # creates an empty set to store cleaned supplier name
+
+raw_categories = set() # creates an empty set to store uncleaned product categories
+clean_categories = set() # creates an empty set to store cleaned product categories
+
+delivery_statuses = set() # creates empty set to store unique delivery status
+
+for row in rows:
+    raw_suppliers.add(row['supplier_name']) # adds the uncleaned supplier names and add to a set
+    raw_categories.add(row['product_category']) # adds the uncleaned product categories and add to a set
+
+    clean_suppliers.add(clean_supplier(row['supplier_name'])) # adds the cleaned supplier names and add to a set
+    clean_categories.add(clean_category(row['product_category'])) # adds the cleaned product categories and add to a set
+
+    delivery_statuses.add(row['delivery_status']) # gets the delivery status from the row and adds it
+
+print(f'Suppliers - Raw: {len(raw_suppliers)} | {len(clean_suppliers)}') # uses len to compare number of unique values before and after cleaning
+print(f'Categories - Raw: {len(raw_categories)} | {len(clean_categories)}') # uses len to compare number of unique values before and after cleaning
+
+print(delivery_statuses)
+
+motors_suppliers = category_suppliers.get('Motors', set()) # retrieves the set of suppliers that provide motors
+pumps_suppliers = category_suppliers.get('Pumps', set()) # safely retrieves the set of suppliers that provide pumps
+
+# Both motors and pumps
+both_motors_and_pumps = motors_suppliers & pumps_suppliers # uses set intersection operator to find suppliers that appear in both sets
+print(f'Suppliers for  Both Motors and Pumps: {both_motors_and_pumps}') # prints the result of both
+
+# Either Motors or Pumps
+either_motors_or_pumps = motors_suppliers | pumps_suppliers 
+print(f'Suppliers for Either Motors or Pumps: {either_motors_or_pumps}') # prints the result of the union of both sets
+
+# Motors But Not Pumps
+motors_not_pumps = motors_suppliers - pumps_suppliers
+print(f'Suppliers for Motors But Not Pumps: {motors_not_pumps}') # prints the result of suppliers that provide motors but removes pumps
+
+# Task 4
+
+single_source_count = 0
+total_categories = len(category_suppliers)
+
+for category, suppliers in category_suppliers.items():
+    if len(suppliers) == 1:
+        supplier_name = list(suppliers)[0]
+        print(f'RISK: "{category}" depends on only one supplier: {supplier_name}')
+        single_source_count += 1
+
+print(f'\n{single_source_count} of {total_categories} categories are single-source.')
+
+# Task 5
+
+network = {}
+
+for row in rows:
+    supplier = clean_supplier(row['supplier_name'])
+    category = clean_category(row['product_category'])
+    cost = float(row['total_cost'])
+
+    if supplier not in network:
+        network[supplier] = {
+            'categories': set(),
+            'order_count': 0,
+            'total_spend': 0.0
+        }
+
+    network[supplier]['categories'].add(category)
+    network[supplier]['order_count'] += 1
+    network[supplier]['total_spend'] += cost
+
+target_supplier = 'SupplierA'
+if target_supplier in network:
+    print(network[target_supplier])
+else:
+    print(f"Supplier '{target_supplier}' not founf in network.")
+
+for supp, data in network.items():
+    print(f'''Supplier: {supp} | Orders: {data['order_count']} 
+          | Categories Supplied: {len(data['categories'])} 
+          | Total Spend: ${data['total_spend']:,.2f}''')
+
+# Challenge 1
+
+high_value_orders = []
+
+for row in rows:
+    cost = float(row['total_cost'])
+    if cost > 100000:
+        high_value_orders.append(cost)
+
+total_orders = len(rows)
+count_high_value = len(high_value_orders)
+
+if total_orders > 0:
+    percentage = (count_high_value / total_orders) * 100
+else:
+    percentage = 0.0
+
+print(f'Number of orders above 100,000: {count_high_value}')
+print(f'Total number of orders: {total_orders}')
+print(f'Percentage of high-value orders: {percentage:.2f}%')
+
+# Challenge 2
+
+max_categories_count = 0
+top_supplier = None
+
+for supplier, data in network.items():
+    category_count = len(data['categories'])
+
+    if category_count > max_categories_count:
+        max_categories_count = category_count
+        top_supplier = supplier
+
+print(f'Supplier with the most categories: {top_supplier}')
+print(f'Number of categories provided: {max_categories_count}')
+print(f'Categories supplied: {network[top_supplier]['categories']}')
+
+# Challenge 3
+
+status_costs = {}
+
+for row in rows:
+    status = row['delivery_status'].strip()
+    cost = float(row['total_cost'])
+
+    if status not in status_costs:
+        status_costs[status] = []
+
+    status_costs[status].append(cost)
+
+for status, costs in status_costs.items():
+    print(f"""Status: '{status}' | Total Orders: {len(costs)} 
+          | Total Value: ${sum(costs):,.2f}""")
+
+    target_status = 'Delivered'
+
+    if target_status in status_costs:
+        delivered_costs = status_costs[target_status]
+        avg_delivered_value = sum(delivered_costs) / len(delivered_costs)
+
+        print(f"\nAverage value of a '{target_status}' order: ${avg_delivered_value:,.2f}")
+    else:
+        print(f"\nStatus '{target_status}' not found in dataset.")
